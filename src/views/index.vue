@@ -48,7 +48,7 @@
 
         <div class="row layout-top-spacing">
 
-            <div  class=" col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <!-- <div  class=" col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
                 <div class="border-info card widget widget-top-selling-products">
                     <div class="widget-content mt-3">
                         <h5>Service Types</h5>
@@ -57,7 +57,7 @@
                         <h2><v-f-number ref="counter" :start-val="0" :end-val="17" :duration="7000" /></h2>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             
             <div class=" col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">

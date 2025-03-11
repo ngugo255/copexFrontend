@@ -11,6 +11,12 @@ import store from '../store';
 const routes = [
     //dashboard
     { path: '/', name: 'Home', component: Home },
+
+    {
+        path: '/jobcards',
+        name: 'jobcards',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/jobcards.vue'),
+    },
     {
         path: '/masters/service',
         name: 'masters-service',

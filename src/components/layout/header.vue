@@ -590,7 +590,7 @@
                         </ul>
                     </li>
                     <li class="menu single-menu">
-                        <router-link to="/" class="dropdown-toggle autodroprown">
+                        <router-link to="/jobcards" class="dropdown-toggle autodroprown">
                             <div class="">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -607,7 +607,7 @@
                                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                                     <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"></path>
                                 </svg>
-                                <span>{{ $t('Jobcards') }}</span>
+                                <span>{{ $t('jobcards') }}</span>
                             </div>
                            
                         </router-link>
