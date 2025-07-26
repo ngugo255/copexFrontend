@@ -817,18 +817,18 @@
     }
 }
 
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .chat-system .chat-box {
-        .overlay-phone-call {
-            background-image: none;
-        }
+// @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+//     .chat-system .chat-box {
+//         .overlay-phone-call {
+//             background-image: none;
+//         }
 
-        .overlay-video-call {
-            background-image: none;
+//         .overlay-video-call {
+//             background-image: none;
 
-            &.onConnect {
-                background-attachment: local;
-            }
-        }
-    }
-}
+//             &.onConnect {
+//                 background-attachment: local;
+//             }
+//         }
+//     }
+// }

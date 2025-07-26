@@ -3,7 +3,7 @@
         <div class="overlay-setting" :class="{ show: isOpen }" @click="isOpen = !isOpen"></div>
 
         <div class="app-settings" :class="{ active: isOpen }">
-            <a href="javascript:;" id="settingbutton" class="setting" @click="isOpen = !isOpen">
+            <!-- <a href="javascript:;" id="settingbutton" class="setting" @click="isOpen = !isOpen">
                 <h5 class="mb-0">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -23,12 +23,10 @@
                         ></path>
                     </svg>
                 </h5>
-            </a>
+            </a> -->
             <perfect-scrollbar class="sidbarchat p-3" tag="div">
                 <a class="btn-close" href="javascript:;" @click="isOpen = !isOpen"> </a>
-                <div class="text-center">
-                    <img src="@/assets/images/features_overview.svg" alt="..." class="img-fluid" />
-                </div>
+               
                 <h5 class="mb-0 text-center">TEMPLATE CUSTOMIZER</h5>
                 <p class="text-center">Set preferences that will be cookied for your live preview demonstration.</p>
                 <hr />
@@ -154,6 +152,7 @@
         setTemplateStyle();
         setMenuStyle();
         setLayoutStyle();
+        window.addEventListener('resize', setMenuStyle);
     });
 
     const setTemplateStyle = () => {
@@ -161,8 +160,10 @@
     };
 
     const setMenuStyle = () => {
-        store.commit('toggleMenuStyle', store.state.menu_style);
-    };
+    const isMobile = window.innerWidth <= 768;
+    store.commit('toggleMenuStyle', isMobile ? 'vertical' : 'horizontal');
+};
+
 
     const setLayoutStyle = () => {
         store.commit('toggleLayoutStyle', store.state.layout_style);

@@ -41,4 +41,27 @@
     import Sidebar from '@/components/layout/sidebar.vue';
     import Footer from '@/components/layout/footer.vue';
     import appSettings from '@/components/app-settings.vue';
+ 
+   import { ref, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const user = ref(null);
+const token = ref(null);
+
+onMounted(() => {
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
+    
+    if (storedUser && storedToken) {
+        user.value = JSON.parse(storedUser);
+        token.value = storedToken;
+    } else {
+        // Redirect to login if no user or token found
+        router.push('/');
+    }
+
+    
+});
+
 </script>

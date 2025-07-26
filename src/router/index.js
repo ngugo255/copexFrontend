@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 import Home from '../views/index.vue';
 import store from '../store';
@@ -10,17 +10,158 @@ import store from '../store';
 
 const routes = [
     //dashboard
-    { path: '/', name: 'Home', component: Home },
+    {
+        path: '/',
+        name: 'login',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/login.vue'),
+        meta: { layout: 'auth' },
+    },
+    { path: '/home', name: 'Home', component: Home },
 
+    {
+        path: '/bulk-statements',
+        name: 'bulk-statements',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/distribution/bulk_statements.vue'),
+    },
+    {
+        path: '/machine-statement/:distribution_id',
+        name: 'machine-statement',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/distribution/machine_statement.vue'),
+    },
+
+    {
+        path: '/assets/machines',
+        name: 'assets-machines',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/assets/machines.vue'),
+    },
+
+    {
+        path: '/bulk-distribution/:project_id',
+        name: 'bulk',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/distribution/bulk_distribution.vue'),
+    },
+
+    {
+        path: '/direct-filling/',
+        name: 'direct-filling',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/distribution/direct_fill.vue'),
+    },
+
+
+
+    {
+        path: '/direct-fill-statement/:distribution_id',
+        name: 'direct-fill-statement',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/distribution/direct_fill_statement.vue'),
+    },
+
+  {
+        path: '/jobcard/:jobcard_id/:machine_id',
+        name: 'jobcard',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/jobcards/jobcard.vue'),
+    },
     {
         path: '/jobcards',
         name: 'jobcards',
-        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/jobcards.vue'),
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/jobcards/jobcard_list.vue'),
     },
+
+    {
+        path: '/orders',
+        name: 'orders',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/preview.vue'),
+    },
+
+       {
+        path: '/requisitions',
+        name: 'requisitions',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/requisition.vue'),
+    },
+
+           {
+        path: '/good-issue-notes',
+        name: 'good-issue-notes',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/goodIssueNote.vue'),
+    },
+        {
+        path: '/orders2',
+        name: 'orders2',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/preview2.vue'),
+    },
+    
+
+    {
+        path: '/copex-order-items/:order_id',
+        name: 'copex-order-items',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/copex_items_list.vue'),
+    },
+
+    {
+        path: '/bushman-order-items/:order_id',
+        name: 'bushman-order-items',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/bushman_items_list.vue'),
+    },
+
+       {
+        path: '/masters/ai',
+        name: 'masters-ai',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/ai.vue'),
+    },
+
+                {
+        path: '/masters/approval-check',
+        name: 'masters-approval-check',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/approvalCheck.vue'),
+    },
+
+
+            {
+        path: '/masters/labours',
+        name: 'masters-labours',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/labour.vue'),
+    },
+
+                {
+        path: '/masters/labour-request',
+        name: 'masters-labour-request',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/labourRequest.vue'),
+    },
+
+
+        {
+        path: '/masters/labour-type',
+        name: 'masters-labour-type',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/labourType.vue'),
+    },
+
+    
+        {
+        path: '/masters/lpo-items',
+        name: 'masters-lpo-items',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/lpoItems.vue'),
+    },
+
+    {
+        path: '/masters/machines',
+        name: 'masters-machines',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/machines.vue'),
+    },
+
+      {
+        path: '/masters/machine-type',
+        name: 'masters-machine-type',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/machine_type.vue'),
+    },
+
     {
         path: '/masters/service',
         name: 'masters-service',
         component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/service.vue'),
+    },
+    {
+        path: '/masters/vendors',
+        name: 'masters-vendors',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/vendors.vue'),
     },
     {
         path: '/masters/employees',
@@ -28,543 +169,202 @@ const routes = [
         component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/employees.vue'),
     },
 
-    //components
     {
-        path: '/components/tabs',
-        name: 'tabs',
-        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/components/tabs.vue'),
+        path: '/masters/items-list',
+        name: 'masters-items',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/items/dashboard.vue'),
+    },
+
+        {
+        path: '/masters/item-categories',
+        name: 'masters-item-categories',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/items/category.vue'),
+    },
+
+      {
+        path: '/masters/logs',
+        name: 'masters-logs',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/logs.vue'),
     },
     {
-        path: '/components/accordions',
-        name: 'accordions',
-        component: () => import(/* webpackChunkName: "components-accordions" */ '../views/components/accordions.vue'),
+        path: '/masters/units',
+        name: 'masters-units',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/units.vue'),
     },
     {
-        path: '/components/modals',
-        name: 'modals',
-        component: () => import(/* webpackChunkName: "components-modals" */ '../views/components/modals.vue'),
+        path: '/masters/users',
+        name: 'masters-users',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/users.vue'),
     },
     {
-        path: '/components/cards',
-        name: 'cards',
-        component: () => import(/* webpackChunkName: "components-cards" */ '../views/components/cards.vue'),
-    },
-    {
-        path: '/components/carousel',
-        name: 'carousel',
-        component: () => import(/* webpackChunkName: "components-carousel" */ '../views/components/carousel.vue'),
+        path: '/masters/role',
+        name: 'masters-roles',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/role.vue'),
     },
 
     {
-        path: '/components/timeline',
-        name: 'timeline',
-        component: () => import(/* webpackChunkName: "components-timeline" */ '../views/components/timeline.vue'),
+        path: '/masters/role-permissions',
+        name: 'masters-role-permissions',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/rolePermissions.vue'),
     },
+
+
+    
     {
-        path: '/components/media-object',
-        name: 'media-object',
-        component: () => import(/* webpackChunkName: "components-media-object" */ '../views/components/media_object.vue'),
-    },
-    {
-        path: '/components/list-group',
-        name: 'list-group',
-        component: () => import(/* webpackChunkName: "components-list-group" */ '../views/components/list_group.vue'),
-    },
-    {
-        path: '/components/pricing-table',
-        name: 'pricing-table',
-        component: () => import(/* webpackChunkName: "components-pricing-table" */ '../views/components/pricing_table.vue'),
-    },
-    {
-        path: '/components/notifications',
-        name: 'notifications',
-        component: () => import(/* webpackChunkName: "components-notifications" */ '../views/components/toast.vue'),
+        path: '/masters/permissions',
+        name: 'masters-permission',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/permission.vue'),
     },
 
     {
-        path: '/components/lightbox',
-        name: 'lightbox',
-        component: () => import(/* webpackChunkName: "components-lightbox" */ '../views/components/lightbox.vue'),
-    },
-    {
-        path: '/components/countdown',
-        name: 'countdown',
-        component: () => import(/* webpackChunkName: "components-countdown" */ '../views/components/countdown.vue'),
-    },
-    {
-        path: '/components/counter',
-        name: 'counter',
-        component: () => import(/* webpackChunkName: "components-counter" */ '../views/components/counter.vue'),
-    },
-    {
-        path: '/components/sweetalert',
-        name: 'sweetalert',
-        component: () => import(/* webpackChunkName: "components-sweetalert" */ '../views/components/sweetalert.vue'),
+        path: '/masters/projects',
+        name: 'masters-projects',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/projects.vue'),
     },
 
-    //fonts
-    {
-        path: '/font-icons',
-        name: 'font-icons',
-        component: () => import(/* webpackChunkName: "font-icons" */ '../views/font_icons.vue'),
+        {
+        path: '/masters/remark-records',
+        name: 'masters-remark-records',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/remark_records.vue'),
     },
 
-    //pages
     {
-        path: '/pages/helpdesk',
-        name: 'helpdesk',
-        component: () => import(/* webpackChunkName: "pages-helpdesk" */ '../views/pages/helpdesk.vue'),
+        path: '/user/profile',
+        name: 'user-profile',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/user/profile.vue'),
     },
-    {
-        path: '/pages/contact-us',
-        name: 'contact-us',
-        component: () => import(/* webpackChunkName: "pages-contact-us" */ '../views/pages/contact_us.vue'),
-    },
-    {
-        path: '/pages/faq',
-        name: 'faq',
-        component: () => import(/* webpackChunkName: "pages-faq" */ '../views/pages/faq.vue'),
-    },
-    {
-        path: '/pages/faq2',
-        name: 'faq2',
-        component: () => import(/* webpackChunkName: "pages-faq2" */ '../views/pages/faq2.vue'),
-    },
-    {
-        path: '/pages/privacy-policy',
-        name: 'privacy-policy',
-        component: () => import(/* webpackChunkName: "pages-privacy-policy" */ '../views/pages/privacy_policy.vue'),
-    },
-    {
-        path: '/pages/coming-soon',
-        name: 'coming-soon',
-        component: () => import(/* webpackChunkName: "pages-coming-soon" */ '../views/pages/coming_soon.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/pages/error404',
-        name: 'error404',
-        component: () => import(/* webpackChunkName: "pages-error404" */ '../views/pages/error404.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/pages/error500',
-        name: 'error500',
-        component: () => import(/* webpackChunkName: "pages-error500" */ '../views/pages/error500.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/pages/error503',
-        name: 'error503',
-        component: () => import(/* webpackChunkName: "pages-error503" */ '../views/pages/error503.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/pages/maintenence',
-        name: 'maintenence',
-        component: () => import(/* webpackChunkName: "pages-maintenence" */ '../views/pages/maintenence.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/pages/blank-page',
-        name: 'blank-page',
-        component: () => import(/* webpackChunkName: "pages-blank-page" */ '../views/pages/blank_page.vue'),
-    },
-    {
-        path: '/pages/sample',
-        name: 'sample',
-        component: () => import(/* webpackChunkName: "pages-sample" */ '../views/pages/sample.vue'),
+   
+
+      {
+        path: '/chats',
+        name: 'system-chats',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/chats/dashboard.vue'),
     },
 
-    //auth
+
     {
-        path: '/auth/login-boxed',
-        name: 'login-boxed',
-        component: () => import(/* webpackChunkName: "auth-login-boxed" */ '../views/auth/login_boxed.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/register-boxed',
-        name: 'register-boxed',
-        component: () => import(/* webpackChunkName: "auth-register-boxed" */ '../views/auth/register_boxed.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/lockscreen-boxed',
-        name: 'lockscreen-boxed',
-        component: () => import(/* webpackChunkName: "auth-lockscreen-boxed" */ '../views/auth/lockscreen_boxed.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/pass-recovery-boxed',
-        name: 'pass-recovery-boxed',
-        component: () => import(/* webpackChunkName: "auth-pass-recovery-boxed" */ '../views/auth/pass_recovery_boxed.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/login',
-        name: 'login',
-        component: () => import(/* webpackChunkName: "auth-login" */ '../views/auth/login.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "auth-register" */ '../views/auth/register.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/lockscreen',
-        name: 'lockscreen',
-        component: () => import(/* webpackChunkName: "auth-lockscreen" */ '../views/auth/lockscreen.vue'),
-        meta: { layout: 'auth' },
-    },
-    {
-        path: '/auth/pass-recovery',
-        name: 'pass-recovery',
-        component: () => import(/* webpackChunkName: "auth-pass-recovery" */ '../views/auth/pass_recovery.vue'),
-        meta: { layout: 'auth' },
+        path: '/company/copex',
+        name: 'copex-company',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/companies/copex/dashboard.vue'),
     },
 
-    //elements
-    {
-        path: '/elements/alerts',
-        name: 'alerts',
-        component: () => import(/* webpackChunkName: "elements-alerts" */ '../views/elements/alerts.vue'),
-    },
-    {
-        path: '/elements/avatar',
-        name: 'avatar',
-        component: () => import(/* webpackChunkName: "elements-avatar" */ '../views/elements/avatar.vue'),
-    },
-    {
-        path: '/elements/badges',
-        name: 'badges',
-        component: () => import(/* webpackChunkName: "elements-badges" */ '../views/elements/badges.vue'),
-    },
-    {
-        path: '/elements/breadcrumbs',
-        name: 'breadcrumbs',
-        component: () => import(/* webpackChunkName: "elements-breadcrumbs" */ '../views/elements/breadcrumbs.vue'),
-    },
-    {
-        path: '/elements/buttons',
-        name: 'buttons',
-        component: () => import(/* webpackChunkName: "elements-buttons" */ '../views/elements/buttons.vue'),
-    },
-    {
-        path: '/elements/buttons-group',
-        name: 'buttons-group',
-        component: () => import(/* webpackChunkName: "elements-buttons-group" */ '../views/elements/buttons_group.vue'),
-    },
-    {
-        path: '/elements/color-library',
-        name: 'color-library',
-        component: () => import(/* webpackChunkName: "elements-color-library" */ '../views/elements/color_library.vue'),
-    },
-    {
-        path: '/elements/dropdown',
-        name: 'dropdown',
-        component: () => import(/* webpackChunkName: "elements-dropdown" */ '../views/elements/dropdown.vue'),
-    },
-    {
-        path: '/elements/infobox',
-        name: 'infobox',
-        component: () => import(/* webpackChunkName: "elements-infobox" */ '../views/elements/infobox.vue'),
-    },
-    {
-        path: '/elements/jumbotron',
-        name: 'jumbotron',
-        component: () => import(/* webpackChunkName: "elements-jumbotron" */ '../views/elements/jumbotron.vue'),
-    },
-    {
-        path: '/elements/loader',
-        name: 'loader',
-        component: () => import(/* webpackChunkName: "elements-loader" */ '../views/elements/loader.vue'),
-    },
-    {
-        path: '/elements/pagination',
-        name: 'pagination',
-        component: () => import(/* webpackChunkName: "elements-pagination" */ '../views/elements/pagination.vue'),
-    },
-    {
-        path: '/elements/popovers',
-        name: 'popovers',
-        component: () => import(/* webpackChunkName: "elements-popovers" */ '../views/elements/popovers.vue'),
-    },
-    {
-        path: '/elements/progress-bar',
-        name: 'progress-bar',
-        component: () => import(/* webpackChunkName: "elements-progress-bar" */ '../views/elements/progress_bar.vue'),
-    },
-    {
-        path: '/elements/search',
-        name: 'search',
-        component: () => import(/* webpackChunkName: "elements-search" */ '../views/elements/search.vue'),
-    },
-    {
-        path: '/elements/tooltips',
-        name: 'tooltips',
-        component: () => import(/* webpackChunkName: "elements-tooltips" */ '../views/elements/tooltips.vue'),
-    },
-    {
-        path: '/elements/treeview',
-        name: 'treeview',
-        component: () => import(/* webpackChunkName: "elements-treeview" */ '../views/elements/treeview.vue'),
-    },
-    {
-        path: '/elements/typography',
-        name: 'typography',
-        component: () => import(/* webpackChunkName: "elements-typography" */ '../views/elements/typography.vue'),
+        {
+        path: '/company/copex2',
+        name: 'copex-company2',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/companies/copex/dashboard2.vue'),
     },
 
-    //tables
     {
-        path: '/tables',
-        name: 'tables',
-        component: () => import(/* webpackChunkName: "tables" */ '../views/tables.vue'),
+        path: '/company/bushman',
+        name: 'bushman-company',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/companies/bushman/dashboard.vue'),
     },
 
-    //users
     {
-        path: '/users/profile',
-        name: 'profile',
-        component: () => import(/* webpackChunkName: "users-profile" */ '../views/users/profile.vue'),
-    },
-    {
-        path: '/users/account-setting',
-        name: 'account-setting',
-        component: () => import(/* webpackChunkName: "users-account-setting" */ '../views/users/account_setting.vue'),
+        path: '/assets/spares',
+        name: 'assets-spares',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/assets/spares_list.vue'),
     },
 
-    //drag&drop
-    {
-        path: '/dragndrop',
-        name: 'dragndrop',
-        component: () => import(/* webpackChunkName: "dragndrop" */ '../views/dragndrop.vue'),
+
+     {
+        path: '/report/item-budget/:project_id/:budget_id',
+        name: 'item-budget-report',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/item_budget.vue'),
     },
 
-    //charts
     {
-        path: '/charts/apex-chart',
-        name: 'apex-chart',
-        component: () => import(/* webpackChunkName: "charts-apex-chart" */ '../views/charts/apex_chart.vue'),
+        path: '/budgets',
+        name: 'budgets',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/budgets/dashboard.vue'),
     },
 
-    //widgets
     {
-        path: '/widgets',
-        name: 'widgets',
-        component: () => import(/* webpackChunkName: "widgets" */ '../views/widgets.vue'),
+        path: '/report/project-budget',
+        name: 'project-budget-report',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/project_budget.vue'),
     },
 
-    //forms
     {
-        path: '/forms/basic',
-        name: 'basic',
-        component: () => import(/* webpackChunkName: "forms-basic" */ '../views/forms/basic.vue'),
+        path: '/report/machine-usage/:machine_id',
+        name: 'machine-usage-report',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/machine_report.vue'),
     },
+{
+    path: '/report/site-report',
+    name: 'site-report',
+    component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/site_report.vue'),
+},
+{
+    path: '/report/boq',
+    name: 'boq-report',
+    component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/boq.vue'),
+},
+
+{
+    path: '/report/allowance',
+    name: 'allowance-report',
+    component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/allowance.vue'),
+},
+
+{
+    path: '/report/allowance-approved/:project_id/:request_id/:date',
+    name: 'allowance-approved-report',
+    component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/allowanceApproved.vue'),
+},
+
+{
+    path: '/report/allocation',
+    name: 'allocation-report',
+    component: () => import(/* webpackChunkName: "components-tabs" */ '../views/report/allocation.vue'),
+},
     {
-        path: '/forms/input-group',
-        name: 'input-group',
-        component: () => import(/* webpackChunkName: "forms-input-group" */ '../views/forms/input_group.vue'),
-    },
-    {
-        path: '/forms/layouts',
-        name: 'layouts',
-        component: () => import(/* webpackChunkName: "forms-layouts" */ '../views/forms/layouts.vue'),
-    },
-    {
-        path: '/forms/validation',
-        name: 'validation',
-        component: () => import(/* webpackChunkName: "forms-validation" */ '../views/forms/validation.vue'),
-    },
-    {
-        path: '/forms/checkbox-radio',
-        name: 'checkbox-radio',
-        component: () => import(/* webpackChunkName: "forms-checkbox-radio" */ '../views/forms/checkbox_radio.vue'),
-    },
-    {
-        path: '/forms/switches',
-        name: 'switches',
-        component: () => import(/* webpackChunkName: "forms-switches" */ '../views/forms/switches.vue'),
-    },
-    {
-        path: '/forms/wizards',
-        name: 'wizards',
-        component: () => import(/* webpackChunkName: "forms-wizards" */ '../views/forms/wizards.vue'),
-    },
-    {
-        path: '/forms/file-upload',
-        name: 'file-upload',
-        component: () => import(/* webpackChunkName: "forms-file-upload" */ '../views/forms/fileupload.vue'),
-    },
-    {
-        path: '/forms/clipboard',
-        name: 'clipboard',
-        component: () => import(/* webpackChunkName: "forms-clipboard" */ '../views/forms/clipboard.vue'),
-    },
-    {
-        path: '/forms/date-picker',
-        name: 'date-picker',
-        component: () => import(/* webpackChunkName: "forms-date-picker" */ '../views/forms/date_range_picker.vue'),
-    },
-    {
-        path: '/forms/input-mask',
-        name: 'input-mask',
-        component: () => import(/* webpackChunkName: "forms-input-mask" */ '../views/forms/input_mask.vue'),
-    },
-    {
-        path: '/forms/quill-editor',
-        name: 'quill-editor',
-        component: () => import(/* webpackChunkName: "forms-quill-editor" */ '../views/forms/quill_editor.vue'),
-    },
-    {
-        path: '/forms/touchspin',
-        name: 'touchspin',
-        component: () => import(/* webpackChunkName: "forms-touchspin" */ '../views/forms/touchspin.vue'),
-    },
-    {
-        path: '/forms/markdown-editor',
-        name: 'markdown-editor',
-        component: () => import(/* webpackChunkName: "forms-markdown-editor" */ '../views/forms/markdown_editor.vue'),
-    },
-    {
-        path: '/forms/select2',
-        name: 'select2',
-        component: () => import(/* webpackChunkName: "forms-select2" */ '../views/forms/select2.vue'),
+        path: '/voucher',
+        name: 'voucher',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/voucher/index.vue'),
     },
 
-    //apps
-    {
-        path: '/apps/chat',
-        name: 'chat',
-        component: () => import(/* webpackChunkName: "apps-chat" */ '../views/apps/chat.vue'),
-    },
-    {
-        path: '/apps/mailbox',
-        name: 'mailbox',
-        component: () => import(/* webpackChunkName: "apps-mailbox" */ '../views/apps/mailbox.vue'),
-    },
-    {
-        path: '/apps/todo-list',
-        name: 'todo-list',
-        component: () => import(/* webpackChunkName: "apps-todo-list" */ '../views/apps/todo_list.vue'),
-    },
-    {
-        path: '/apps/contacts',
-        name: 'contacts',
-        component: () => import(/* webpackChunkName: "apps-contacts" */ '../views/apps/contacts.vue'),
-    },
-    {
-        path: '/apps/notes',
-        name: 'notes',
-        component: () => import(/* webpackChunkName: "apps-notes" */ '../views/apps/notes.vue'),
-    },
-    {
-        path: '/apps/scrumboard',
-        name: 'scrumboard',
-        component: () => import(/* webpackChunkName: "apps-scrumboard" */ '../views/apps/scrumboard.vue'),
-    },
-    {
-        path: '/apps/calendar',
-        name: 'calendar',
-        component: () => import(/* webpackChunkName: "apps-calendar" */ '../views/apps/calendar.vue'),
-    },
-    {
-        path: '/apps/invoice/list',
-        name: 'invoice-list',
-        component: () => import(/* webpackChunkName: "apps-invoice-list" */ '../views/apps/invoice/list.vue'),
-    },
-    {
-        path: '/apps/invoice/preview',
-        name: 'invoice-preview',
-        component: () => import(/* webpackChunkName: "apps-invoice-preview" */ '../views/apps/invoice/preview.vue'),
-    },
-    {
-        path: '/apps/invoice/add',
-        name: 'invoice-add',
-        component: () => import(/* webpackChunkName: "apps-invoice-add" */ '../views/apps/invoice/add.vue'),
-    },
-    {
-        path: '/apps/invoice/edit',
-        name: 'invoice-edit',
-        component: () => import(/* webpackChunkName: "apps-invoice-edit" */ '../views/apps/invoice/edit.vue'),
+     {
+        path: '/payment',
+        name: 'payment',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/payment/index.vue'),
     },
 
-    //tables
-    {
-        path: '/tables/requisitions',
-        name: 'table-requisitions',
-        component: () => import(/* webpackChunkName: "tables-requisition" */ '../views/tables/requisitions.vue'),
-        // component: () => import(/* webpackChunkName: "tables-requisition" */ '../views/components/dashboard_counter.vue'),
-    },  
-    {
-        path: '/requisition-list/:requisition_id',
-        name: 'requisition-list',
-        component: () => import(/* webpackChunkName: "tables-requisition" */ '../views/tables/requisition_list.vue'),
-        // component: () => import(/* webpackChunkName: "tables-requisition" */ '../views/components/dashboard_counter.vue'),
-    },      
-    {
-        path: '/tables/basic',
-        name: 'table-basic',
-        component: () => import(/* webpackChunkName: "tables-basic" */ '../views/tables/basic.vue'),
+
+      {
+        path: '/labour-request',
+        name: 'labour-request',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/labours/labour_request.vue'),
     },
-    {
-        path: '/tables/striped',
-        name: 'striped',
-        component: () => import(/* webpackChunkName: "tables-striped" */ '../views/tables/striped.vue'),
+// 25 june 2025
+
+      {
+        path: '/good-received-notes/dashboard',
+        name: 'good-received-notes-dashboard',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/goodReceivedNotes/dashboard.vue'),
     },
-    {
-        path: '/tables/order-sorting',
-        name: 'order-sorting',
-        component: () => import(/* webpackChunkName: "tables-order-sorting" */ '../views/tables/order_sorting.vue'),
+
+        {
+        path: '/stores/dashboard',
+        name: 'stores-dashboard',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/stores/dashboard.vue'),
     },
-    {
-        path: '/tables/multi-column',
-        name: 'multi-column',
-        component: () => import(/* webpackChunkName: "tables-multi-column" */ '../views/tables/multi_column.vue'),
+        {
+        path: '/logs/deleted-orders',
+        name: 'logs-deleted-orders',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/logs/deletedOrders.vue'),
     },
-    {
-        path: '/tables/multiple-tables',
-        name: 'multiple-tables',
-        component: () => import(/* webpackChunkName: "tables-multiple-tables" */ '../views/tables/multiple_tables.vue'),
+            {
+        path: '/budgets',
+        name: 'budgets',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/budgets/dashboard.vue'),
     },
-    {
-        path: '/tables/alt-pagination',
-        name: 'alt-pagination',
-        component: () => import(/* webpackChunkName: "tables-alt-pagination" */ '../views/tables/alt_pagination.vue'),
-    },
-    {
-        path: '/tables/custom',
-        name: 'custom',
-        component: () => import(/* webpackChunkName: "tables-custom" */ '../views/tables/custom.vue'),
-    },
-    {
-        path: '/tables/range-search',
-        name: 'range-search',
-        component: () => import(/* webpackChunkName: "tables-range-search" */ '../views/tables/range_search.vue'),
-    },
-    {
-        path: '/tables/export',
-        name: 'export',
-        component: () => import(/* webpackChunkName: "tables-export" */ '../views/tables/export.vue'),
-    },
-    {
-        path: '/tables/live-dom-ordering',
-        name: 'live-dom-ordering',
-        component: () => import(/* webpackChunkName: "tables-live-dom-ordering" */ '../views/tables/live_dom_ordering.vue'),
-    },
-    {
-        path: '/tables/miscellaneous',
-        name: 'miscellaneous',
-        component: () => import(/* webpackChunkName: "tables-miscellaneous" */ '../views/tables/miscellaneous.vue'),
-    },
+   
 ];
 
 const router = new createRouter({
     // mode: 'history',
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     linkExactActiveClass: 'active',
     routes,
     scrollBehavior(to, from, savedPosition) {

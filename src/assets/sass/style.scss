@@ -2,6 +2,11 @@
 @function get_color($color) {
     @return '%23' + str-slice('#{$color}', 2, -1);
 }
+
+ .mymodal{
+  background-color: rgba(122, 122, 122, 0.653);
+ }
+ 
 .sr-only {
     display: none;
 }
@@ -62,12 +67,12 @@
     transition: auto;
 }
 
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .boxed-layout .header-container,
-    .large-boxed-layout .header-container {
-        width: 100%;
-    }
-}
+// @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+//     .boxed-layout .header-container,
+//     .large-boxed-layout .header-container {
+//         width: 100%;
+//     }
+// }
 .boxed-layout {
     .widget.widget-recent-orders .widget-content thead > tr > th {
         padding: 10px 5px;

@@ -15,7 +15,8 @@
 
             <div class="d-flex me-4 mt-2">
                         <div class="ms-auto">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                            <button class="btn btn-primary" @click="service_registration =! service_registration">                           
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>
@@ -23,7 +24,39 @@
  
                         </div>
                     </div>  
-      
+                    <!-- service registration form starts -->
+ <form v-if="service_registration" class="mt-3 p-3 border rounded bg-white shadow" @submit.prevent="registerService">
+        <h4 class="text-center">SERVICE  REGISTRATION FORM</h4>
+        <div class="row mb-2">
+    
+            <div class="col-md-3">
+                <label class="form-label">Service Name</label>
+                <input type="text" class="form-control" placeholder="Enter Service Name" v-model="name" required>
+            </div>
+            <div class="col-md-9">
+                <label class="form-label">Service Description</label>
+                <input type="text" class="form-control" placeholder="Enter Service Description" v-model="description" step="any" required>
+            </div>
+        </div>
+        <div class="text-center gap-2 justify-content-end">
+            <button type="button" class="btn btn-danger me-3" @click="service_registration = false">Cancel</button>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+             <!-- item registration form ends-->
+ 
+                          <!-- loading spinner starts -->
+                          <div v-if="loading_spinner" class="d-flex justify-content-center align-items-center" style="height: 100px;">
+            <span class="text-primary spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                    <path d="M11.534 7h-4.07a.5.5 0 0 0 0 1h4.07a.5.5 0 0 0 0-1z"/>
+                    <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 1 0-.832-.554A4 4 0 1 1 8 4a.5.5 0 0 0 0-1z"/>
+                    <path d="M8 1a7 7 0 1 1-6.546 4.914.5.5 0 1 0-.832-.554A8 8 0 1 0 8 0a.5.5 0 0 0 0 1z"/>
+                </svg>
+                Loading...
+            </span>
+        </div>
+        <!-- Loading spinner ends -->
         <div class="row layout-top-spacing">
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
                 <div class="panel p-0">
@@ -48,7 +81,7 @@
                                     </svg>
                                 </router-link>
                                 
-                                <a href="javascript:void(0);" title="Delete" >
+                                <a href="javascript:void(0);" title="Delete" @click="deleteServiceType(props.row.id)">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -66,27 +99,8 @@
                                     </svg>
                                 </a>
                               
-<!-- modal starts -->
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Service Registration</h5>
-                <button type="button" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
-            </div>
-            <div class="modal-body">
-             <input type="text" class="form-control" placeholder="Enter Service Name" v-model="name" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-dismiss="modal" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
- <!-- modal ends -->
+
  
                                 
                             </template>
@@ -97,16 +111,7 @@
             </div>
         </div>
     </div>
-  <!-- Toast notification starts -->
-  <button type="button" class="btn btn-danger" @click="showToast">Top Right</button>
 
-<div ref="toastTopRight" class="toast position-fixed top-0 end-0 m-2" style="z-index: 1080" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-body toast-info d-flex justify-content-between">
-        Example notification text.
-        <a href="javascript:;" class="text-success ms-2" data-bs-dismiss="toast">DISMISS</a>
-    </div>
-</div>
-<!-- Toast notification ends -->
 </template>
 <style>
     .table3 .actions svg {
@@ -122,15 +127,16 @@
     useMeta({ title: 'Custom Table' });
 
     const axiosInstance = axios.create({
-      baseURL: "http://127.0.0.1:8000/api/v1",
+        baseURL: process.env.VUE_APP_API_BASE_URL
     });
-
+    
     const ServiceTypes = ref([]);
     const name = ref('');
     const loading_spinner = ref(false);
-    let toastTopRight = ref(null);
-    const columns = ref(['id', 'name', 'actions']);
+    const columns = ref(['id', 'name','description', 'actions']);
     const items = ref([]);
+    const service_registration = ref(false);
+    const description = ref('');
     const table_option = ref({
         perPage: 5,
         perPageValues: [5, 10, 20, 50],
@@ -162,20 +168,46 @@
         });
     };
 
-    const showToast = () => {
-        if (toastTopRight.value) {
-            toastTopRight.value.show();
-        }
+    const deleteServiceType = (id) => {
+    if (confirm("Are you sure you want to delete this service type?")) {
+        loading_spinner.value = true;
+        axiosInstance.delete(`/service-type/${id}`)
+            .then((response) => {
+                getServiceTypes();
+                alert(response.data.message);
+                loading_spinner.value = false;
+            });
+    }
+};
+
+    const registerService = () => {
+        service_registration.value = false;
+        loading_spinner.value = true;
+        const itemData = {
+            name: name.value,
+            description: description.value,
+        };
+
+        axiosInstance
+            .post('/service-type', itemData)
+            .then((response) => {
+                getServiceTypes();
+                loading_spinner.value = false;
+                alert('Service registered successfully!');
+                if (response.data.status === 201) {
+                    // fetchJobCards();
+                    // this.fetchJobCards();
+                } else {
+                    console.error("Error registering Order:", response.data.message);
+                }
+            })
+            .catch((error) => {
+                console.error("Error registering Order:", error.message);
+            });
     };
 
-    const initToast = () => {
-        if (toastTopRight.value) {
-            toastTopRight.value = new window.bootstrap.Toast(toastTopRight.value);
-        }
-    };
 
     onMounted(() => {
-        initToast();
         getServiceTypes();
     });
 </script>

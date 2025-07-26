@@ -22,41 +22,15 @@ export default {
         }
         store.commit('toggleLayoutStyle', val);
 
-        val = localStorage.getItem('i18n_locale'); // en, da, de, el, es, fr, hu, it, ja, pl, pt, ru, sv, tr, zh
         if (!val) {
             val = $themeConfig.lang;
 
             const list = store.state.countryList;
             const item = list.find((item) => item.code === val);
-            if (item) {
-                this.toggleLanguage(item);
-            }
         }
     },
 
-    toggleLanguage(item) {
-        let lang = null;
-        if (item) {
-            lang = item;
-        } else {
-            let code = store.state.locale;
-            if (!code) {
-                code = localStorage.getItem('i18n_locale');
-            }
 
-            item = store.state.countryList.find((d) => d.code === code);
-            if (item) {
-                lang = item;
-            }
-        }
-
-        if (!lang) {
-            lang = store.state.countryList.find((d) => d.code === 'en');
-        }
-
-        store.commit('toggleLocale', lang.code);
-        return lang;
-    },
 
     toggleMode(mode) {
         if (!mode) {

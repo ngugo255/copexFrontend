@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import i18n from '../i18n';
+
 
 export default new createStore({
     state: {
@@ -39,12 +39,7 @@ export default new createStore({
         toggleSearch(state, value) {
             state.is_show_search = value;
         },
-        toggleLocale(state, value) {
-            value = value || 'en';
-            i18n.global.locale = value;
-            localStorage.setItem('i18n_locale', value);
-            state.locale = value;
-        },
+  
 
         toggleDarkMode(state, value) {
             //light|dark|system

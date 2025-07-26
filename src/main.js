@@ -4,6 +4,10 @@ import router from './router';
 import store from './store';
 const app = createApp(App);
 
+// multiselect
+import Multiselect from '@vueform/multiselect'
+import '@vueform/multiselect/themes/default.css'
+
 // bootstrap
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
@@ -23,9 +27,7 @@ const head = createHead();
 import Swal from 'sweetalert2';
 window.Swal = Swal;
 
-// nouislider - later remove and add to page due to not working in page
-import VueNouislider from 'vue3-nouislider';
-import 'vue3-nouislider/dist/vue3-nouislider.css';
+
 
 // vue input mask
 import Maska from 'maska';
@@ -34,8 +36,6 @@ import Maska from 'maska';
 import { registerScrollSpy } from 'vue3-scroll-spy/dist/index';
 registerScrollSpy(app, { offset: 118 });
 
-//vue-i18n
-import i18n from './i18n';
 
 // datatables
 import { ClientTable } from 'v-tables-3';
@@ -53,5 +53,5 @@ import 'vue3-form-wizard/dist/style.css';
 import appSetting from './app-setting';
 window.$appSetting = appSetting;
 window.$appSetting.init();
-
-app.use(store).use(router).use(i18n).use(PerfectScrollbar).use(VueNouislider).use(Maska).use(ClientTable).use(vue3JsonExcel).use(VueFormWizard).use(head).mount('#app');
+app.component('Multiselect', Multiselect)
+app.use(store).use(router).use(PerfectScrollbar).use(Maska).use(ClientTable).use(vue3JsonExcel).use(VueFormWizard).use(head).mount('#app');

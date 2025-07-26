@@ -279,15 +279,15 @@ body {
         }
     }
 
-    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-        .form-form {
-            .form-form-wrap {
-                width: 100%;
-            }
+    // @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    //     .form-form {
+    //         .form-form-wrap {
+    //             width: 100%;
+    //         }
 
-            .form-container {
-                height: 100%;
-            }
-        }
-    }
+    //         .form-container {
+    //             height: 100%;
+    //         }
+    //     }
+    // }
 }

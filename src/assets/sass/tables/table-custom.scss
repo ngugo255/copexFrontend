@@ -44,6 +44,15 @@
         padding: 10px 21px;
     }
 
+    @media (max-width: 576px) {
+        .table td,
+        .table th {
+            // christian's codes
+            padding: 5px 5px;
+            font-size: 18px;
+        }
+    }
+
     .table-hover:not(.table-dark) tbody tr:hover td {
         --bs-table-accent-bg: #fafafa;
         // background: #fafafa !important;

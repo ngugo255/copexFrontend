@@ -488,14 +488,14 @@
         }
     }
 
-    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-        /* IE10+ CSS styles go here */
+    // @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    //     /* IE10+ CSS styles go here */
 
-        .new-control.new-checkbox .new-control-indicator {
-            top: -13px;
-            left: -8px;
-        }
-    }
+    //     .new-control.new-checkbox .new-control-indicator {
+    //         top: -13px;
+    //         left: -8px;
+    //     }
+    // }
 
     @media (max-width: 1199px) {
         .searchable-container .searchable-items {
