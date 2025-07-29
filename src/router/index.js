@@ -83,6 +83,12 @@ const routes = [
         name: 'good-issue-notes',
         component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/goodIssueNote.vue'),
     },
+
+               {
+        path: '/good-delivery-notes',
+        name: 'good-delivery-notes',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/orders/goodDeliveryNote.vue'),
+    },
         {
         path: '/orders2',
         name: 'orders2',

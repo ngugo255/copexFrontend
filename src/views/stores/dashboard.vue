@@ -50,7 +50,9 @@
                         <v-client-table :data="stores" :columns="columns" :options="table_option" >
                             <template #actions="props">
                                 <div class="d-flex justify-content-center align-items-center"></div>
-                                     <a href="javascript:;" class="edit me-2" >
+                                     <a 
+                                    v-if="user_permissions.includes('can_edit_stores')"
+                                     href="javascript:;" class="edit me-2" >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="24"
@@ -302,7 +304,7 @@
 
     
                                <a 
-                               v-if="user_permissions.includes('can_delete_store_item')"
+                               v-if="user_permissions.includes('can_delete_store_items')"
                                href="javascript:void(0);" title="Delete" data-bs-toggle="tooltip" data-bs-placement="top">
                                    <svg
                                        xmlns="http://www.w3.org/2000/svg"
@@ -444,10 +446,14 @@
         });
     };
      
+
     const items = ref([])
     const getItems = () => {
-        axiosInstance.get('/item-list').then((response) => {
-            items.value = response.data
+        axiosInstance.get('/item-list?category_id=4').then((response) => {
+            items.value = response.data.map((item) => ({
+                ...item,
+                name: item.description ? item.name + ' - ' + item.description : item.name
+            }))
         });
     };
 

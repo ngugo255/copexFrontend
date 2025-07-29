@@ -50,7 +50,7 @@
                                     :class="{ 'active-filter': activeFilter === null }"
                                 >
                                     <p class="w-title mb-2 text-muted">All</p>
-                                    <p class="w-stats text-primary fs-3 fw-bold">{{ totalcount }}</p>
+                                    <p class="w-stats text-info fs-3 fw-bold">{{ totalcount }}</p>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                                     :class="{ 'active-filter': activeFilter === 1 }"
                                 >
                                     <p class="w-title mb-2 text-muted">Total Machines</p>
-                                    <p class="w-stats text-success fs-3 fw-bold">{{ totalmachine }}</p>
+                                    <p class="w-stats text-primary fs-3 fw-bold">{{ totalmachine }}</p>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                     :class="{ 'active-filter': activeFilter === 2 }"
                                 >
                                     <p class="w-title mb-2 text-muted">Total Vehicles</p>
-                                    <p class="w-stats text-secondary fs-3 fw-bold">{{ totalVehicles }}</p>
+                                    <p class="w-stats text-success fs-3 fw-bold">{{ totalVehicles }}</p>
                                 </div>
                             </div>
                         </div>
@@ -109,20 +109,34 @@
             <input type="text" class="form-control" v-model="machine_name" name="Machine_name" required>
         </div>
         <div class="col-md-4">
-            <label class="form-label">Category {{  category }}</label>
-            <select class="form-control" v-model="category" required>
-              <option value="">Select Category</option>
-              <option value="1">Machine</option>
-              <option value="2">Vehicle</option>
-              <option value="3">Supervision</option>
-            </select>
+            <label class="form-label">Category </label>
+            <Multiselect 
+              v-model="category"
+              :options="[
+                {id: '1', name: 'Machine'},
+                {id: '2', name: 'Vehicle'},
+                {id: '3', name: 'Supervision'}
+              ]"
+              label="name"
+              track-by="id"
+              placeholder="Select Category"
+              :searchable="true"
+              :close-on-select="true"
+              required
+            />
         </div>
         <div class="col-md-4">
             <label class="form-label">Select Type </label>
-            <select class="form-control" v-model="selected_machine_type" required>
-              <option value="">Select Type</option>
-              <option  v-for="type in machines_type" :value="type"> {{ type.name }}</option>
-            </select>
+            <Multiselect 
+              v-model="selected_machine_type"
+              :options="machines_type" 
+              label="name"  
+              track-by="id" 
+              placeholder="Select Type"
+              :searchable="true"
+              :close-on-select="true"
+              required
+            />
             <!-- <Multiselect 
               v-model="selected_machine_type"
               :options="machines_type" 
@@ -216,19 +230,33 @@
     </div>
     <div class="col-md-6">
       <label class="form-label">Category</label>
-      <select v-model="category" class="form-control">
-        <option value="1">Machine</option>
-        <option value="2">Vehicle</option>
-        <option value="3">Supervision</option>
-      </select>
+      <Multiselect 
+        v-model="category"
+        :options="[
+          {id: '1', name: 'Machine'},
+          {id: '2', name: 'Vehicle'},
+          {id: '3', name: 'Supervision'}
+        ]"
+        label="name"
+        track-by="id"
+        placeholder="Select Category"
+        :searchable="true"
+        :close-on-select="true"
+        required
+      />
     </div>
     <div class="col-md-6">
       <label class="form-label">Type</label>
-      <select class="form-control" v-model="selected_machine_type">
-        <option v-for="type in machines_type" :value="type">
-          {{ type.name }}
-        </option>
-      </select>
+      <Multiselect 
+        v-model="selected_machine_type"
+        :options="machines_type" 
+        label="name"  
+        track-by="id" 
+        placeholder="Select Type"
+        :searchable="true"
+        :close-on-select="true"
+        required
+      />
     </div>
     <div class="col-md-6">
       <label class="form-label">Ratio</label>
@@ -252,11 +280,19 @@
     </div> -->
       <div class="col-md-12">
       <label class="form-label">Consuption Type</label>
-    <select class="form-control" v-model="consuption_type">
-      <option value="">Select Option</option>
-      <option  value="km/Litre">Km/Litre</option>
-      <option value="Litre/hr">Litre/hr</option>
-    </select>
+    <Multiselect 
+      v-model="consuption_type"
+      :options="[
+        {id: '1', name: 'Km/Litre'},
+        {id: '2', name: 'Litre/hr'}
+      ]"
+      label="name"
+      track-by="id"
+      placeholder="Select Consumption Type"
+      :searchable="true"
+      :close-on-select="true"
+      required
+    />
     </div>
   </div>
 </div>
@@ -282,7 +318,8 @@
 
 <script setup>
   import { onMounted, ref,inject } from 'vue';
-
+  import Multiselect from '@suadelabs/vue3-multiselect';
+  import '@suadelabs/vue3-multiselect/dist/vue3-multiselect.css';
   import { useMeta } from '@/composables/use-meta';
   useMeta({ title: 'Default Order Sorting Table' });
   import axios from 'axios';
@@ -398,7 +435,7 @@ const filterByCategory = (categoryId, categoryName) => {
 const fetchMachineTypes = () => {
   loading_spinner.value = true;
   axiosInstance
-    .get(`/machine_types`)
+    .get(`/machine-types`)
     .then((response) => {
       if (Array.isArray(response.data)) {
         machines_type.value = response.data;
@@ -432,7 +469,7 @@ const registerMachine = () => {
           name: machine_name.value,
           type_name:selected_machine_type.value.name,
           type_id:selected_machine_type.value.id,
-          category_id:category.value,
+          category_id:category.value.id,
           ratio:machine_ratio.value,
           capacity:machine_capacity.value,
           reserve_litre:machine_reserve_litre.value,

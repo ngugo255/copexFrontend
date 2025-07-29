@@ -370,7 +370,30 @@
                                 </ul>
                             </li> 
                              <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/ai">AI</router-link></li>  
-                            <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/home">Dashboard</router-link></li>                      
+                            <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/home">Dashboard</router-link></li>  
+                             <li v-if="user_permissions.includes('can_view_logs_masters')"  class="sub-sub-submenu-list">
+                                <a href="javascript:;">
+                                    Inventory 
+                                       <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="feather feather-chevron-right"
+                                    >
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </a>
+                                <ul class="collapse list-unstyled sub-submenu">
+                                    <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/item-categories">Category</router-link></li> 
+                                    <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/items-list">Items </router-link></li>  
+                                </ul>
+                            </li>                     
                             <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/items-list">Items </router-link></li>
                             <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/item-categories">Items Category</router-link></li>            
                             <li v-if="user_permissions.includes('can_view_project_masters')"><router-link to="/masters/projects">Projects</router-link></li>
@@ -604,6 +627,22 @@
                         </router-link>
                      
                     </li>
+
+                                            <li v-if="user_permissions.includes('can_view_delivery_notes')"  class="menu single-menu">
+                        <router-link to="/good-delivery-notes" class="dropdown-toggle autodroprown">
+                            <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-box-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z"/>
+</svg>
+                                <span>{{ ('Delivery Note') }}</span>
+                            </div>
+                           
+                        </router-link>
+                     
+                    </li>
+
+
+
 
                        <li v-if="user_permissions.includes('can_view_stores')" class="menu single-menu">
                         <router-link to="/stores/dashboard" class="dropdown-toggle autodroprown">

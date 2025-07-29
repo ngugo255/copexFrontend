@@ -117,7 +117,7 @@ class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
          @click="getGrn()"
         >
           <div class="card shadow border-start-danger h-100 p-3">
-            <h6 class="text-danger">Unconfirmed</h6>
+            <h6 class="text-danger">Pending</h6>
             <h4 class="text-danger">
               <v-f-number :start-val="0" :end-val="summary?.grn?.unapproved ?? 0" :duration="3000"/>
             </h4>
@@ -243,11 +243,11 @@ class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
   </Router-link>
   <!--goods issue note  -->
     <Router-link to="#" 
-    v-if="user_permissions.includes('can_view_material_requisition_card')"
+    v-if="user_permissions.includes('can_view_delivery_note_card')"
   class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
     <div class="card shadow-lg p-3">
       <div class="mb-3">
-        <h3 class="text-dark">Issue & Delivery Note</h3>
+        <h3 class="text-dark">Delivery Note</h3>
       </div>
 
       <div class="row">
@@ -269,7 +269,10 @@ class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
 
         <!-- Unapproved Card -->
         <div 
-        class="col-6">
+        class="col-6"
+           data-bs-toggle="modal" data-bs-target="#delivery_notes"
+          @click="getGdns()"
+        >
           <div class="card shadow border-start-danger h-100 p-3">
             <h6 class="text-success">Delivered</h6>
             <h4 class="text-success">
@@ -400,7 +403,6 @@ class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
   </div>
 </div>
 
-     <!-- moda ends -->
       <!-- grn modal starts  -->
        <div class="modal fade mymodal " id="grns" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl modal-dialog-scrollable"> <!-- Add scrollable class -->
@@ -408,7 +410,7 @@ class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
       
       <!-- Fixed Header -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Unconfirmed GRNs</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Pending GRNs</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
@@ -592,6 +594,81 @@ xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" cl
   </div>
 </div>
              <!-- issue note ends -->
+              <!-- delivery note modal starts -->
+                   <div class="modal fade mymodal " id="delivery_notes" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl modal-dialog-scrollable"> <!-- Add scrollable class -->
+    <div class="modal-content" style="max-height: 95vh; display: flex; flex-direction: column;">
+      
+      <!-- Fixed Header -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Good Issue Notes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div class="modal-body flex-grow-1 overflow-auto">
+        <div class="row">
+          <div class="col-md-5">
+        <div class="row layout-top-spacing">
+          <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
+            <div class="panel p-0">
+              <div class="custom-table table3">
+                <v-client-table :data="gdns" :columns="gdnColumns" >
+                  <template #status="props">
+                    <span class="badge inv-status" :class="'badge-' + props.row.status.color">
+                      {{ props.row.status.name }}
+                    </span>
+                  </template>
+                  <template #actions="props">
+                    <span
+                    class="text-success"
+                     @click="fillGdn(props.row)"
+                    >
+<svg
+ v-if="props.row.id === selectedGdnId"
+xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+</svg>
+                 <svg
+                     v-else
+                       xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+</svg>
+
+                    </span>
+                  </template>
+                </v-client-table>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+          <div class="col-md-7">
+              <div class="row layout-top-spacing">
+          <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
+            <div class="panel p-0">
+              <div class="custom-table table3">
+                <v-client-table :data="gdnItems" :columns="gdnItemColumns" >
+               
+                </v-client-table>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fixed Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+               <!-- delivery note modal ends -->
 </template>
 
 <script setup>
@@ -622,6 +699,42 @@ xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" cl
     fetchSummary();
     setInterval(fetchSummary, 10000);
       
+
+
+      const gdnItemColumns = ref(['Sno','item','requested','supplied','received']);
+      const gdnItems = ref([])
+      const selectedGdnId = ref(null);
+     const fillGdn = (row)=>{
+          selectedGdnId.value = row.id;
+           gdnItems.value = row.items.map((item,index) =>({
+              ...item,
+             Sno : index +1 ,
+             item: item.item_name,
+             unit: item.unit,
+             remark : item.remark,
+             requested: item.requested_quantity,
+             supplied: item.supplied_quantity,
+             received: item.received_quantity
+            }))
+        }
+            const gdns = ref([])
+           const gdnColumns = ref(['Sno','receiver','date_received','actions']);     
+          const getGdns = async (id)=>{
+          axiosInstance.get(`goods-delivery-notes`)
+        .then(response => {
+            gdns.value = response.data.map((item,index) =>({
+              ...item,
+             Sno : index +1 ,
+             receiver : item.received_by,
+             date_received: item.date_received
+            }))
+        })
+        .catch(error => {
+            console.error('Error fetching delivery note :', error);
+        });
+        }
+
+
         const ginItemColumns = ref(['Sno','item','requested','supplied']);
         const ginItems = ref([])
         const selectedGinId = ref(null);
