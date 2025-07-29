@@ -397,6 +397,7 @@
                             <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/items-list">Items </router-link></li>
                             <li v-if="user_permissions.includes('can_view_items_masters')"><router-link to="/masters/item-categories">Items Category</router-link></li>            
                             <li v-if="user_permissions.includes('can_view_project_masters')"><router-link to="/masters/projects">Projects</router-link></li>
+                            <li><router-link to="/masters/approval">Approval Group</router-link></li>
                             <li v-if="user_permissions.includes('can_view_service_masters')"><router-link to="/masters/service">Services</router-link></li>
                             <li v-if="user_permissions.includes('can_view_unit_masters')"><router-link to="/masters/units">Units</router-link></li>
                             <li v-if="user_permissions.includes('can_view_individual_masters')"  class="sub-sub-submenu-list">

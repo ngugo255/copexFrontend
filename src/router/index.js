@@ -233,6 +233,12 @@ const routes = [
         name: 'masters-remark-records',
         component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/remark_records.vue'),
     },
+       
+    {
+        path: '/masters/approval',
+        name: 'masters-approval',
+        component: () => import(/* webpackChunkName: "components-tabs" */ '../views/masters/approval.vue'),
+    },
 
     {
         path: '/user/profile',
