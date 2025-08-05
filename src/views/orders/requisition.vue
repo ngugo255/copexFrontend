@@ -87,9 +87,30 @@
                                 <span class="badge inv-status" :class="'badge-' + props.row.status.class">{{ props.row.status.key }} </span>
                             </template>
                             <template #actions="props">
+
+                                <a href="javascript:void(0);" title="View"
+                             v-if="props.row.status.key === 'Delivered'" 
+                                @click.stop.prevent="handleViewDelivery(props.row.gin_id)"
+                                      >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="text-info"
+                                    >
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
                                  
                                  <a href="javascript:void(0);" title="View" data-bs-toggle="modal" data-bs-target="#view_requisition"
-                                 v-if="props.row.status.key !== 'In Transit'" 
+                                 v-if="props.row.status.key === 'Pending' || props.row.status.key === 'Inactive'" 
                                  @click="viewRequisitionItems(props.row)">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -109,27 +130,15 @@
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </a>
-                                 <a href="javascript:void(0);" title="View" data-bs-toggle="modal" data-bs-target="#view_requisition"
-                                 v-else
-                                 @click="viewIssueNote(props.row.id)">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="text-info"
-                                        data-bs-toggle="modal" data-bs-target="#issue_note"
-                                        
-                                    >
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                </a>
+                                
+<a href="javascript:void(0);" title="View" data-bs-toggle="modal" data-bs-target="#issue_note"
+     v-if="props.row.status.key === 'In Transit'"
+     @click="showIssuedItems(props.row.gin_id)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-info">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  </a>
                                 
                                 <a href="javascript:void(0);" title="Delete" @click="deleteRequisition(props.row.id)">
                                     <svg
@@ -159,7 +168,7 @@
             <!-- requisition table ends -->
 
 
-    <!-- view requisition modal starts -->
+    <!-- view requisition modal for satus Pending and Inactive starts -->
     <div class="modal fade" id="view_requisition" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" style="height: 90vh;">
         <div class="modal-content d-flex flex-column" style="height: 100%;">
@@ -288,98 +297,69 @@
         </div>
       </div>
     </div>
-    <!-- view requisition modal ends -->
+    <!-- view requisition modal for satus Pending and Inactive ends -->
 
-    
-     <!-- issue note modal starts -->
+         <!-- Delivery note modal for status In Transit starts -->
           <div class="modal fade" id="issue_note" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl" style="height: 90vh;">
         <div class="modal-content d-flex flex-column" style="height: 100%;">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Good Issue Note</h1>
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delivery Note</h1>
 
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_issuing" ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_editing" ></button>
           </div>
           <div class="modal-body" style="overflow-y: auto; flex: 1 1 auto;">
            
             
             <div class="modal-body">
-                      <!-- Add Item Form starts -->
-                <div class="d-flex" @click="add_item = !add_item">
-                    <div class="ms-auto">
-                        <button class="btn btn-sm" 
-                                :class="[add_item ? 'btn-danger' : 'btn-primary']"   v-if="status_id === 1">
-                            {{ add_item ? 'X' : 'Add Item' }}
-                        </button>
-                    </div>
-                </div>
-                
-                <form v-if="add_item" @submit.prevent="addNewItem" class="mt-3">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <Multiselect
-                                v-model="selectedItem"
-                                :options="itemList"
-                                label="name"
-                                track-by="id"
-                                placeholder="Select Item"
-                                :searchable="true"
-                                :required="true"
-                                :allow-empty="false"
-                                @select="onItemSelect"
-                            />
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="number" 
-                                   class="form-control" 
-                                   v-model="newItem.quantity" 
-                                   placeholder="Enter Quantity"
-                                   required
-                                   >
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <input type="text" 
-                                   class="form-control" 
-                                   v-model="newItem.remark" 
-                                   placeholder="Enter Remark"
-                                   
-                                   >
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success btn-sm p-2" :disabled="adding_item_spinner">
-                                <template v-if="adding_item_spinner">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                </template>
-                                <template v-else>
-                                    Save
-                                </template>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                        <!-- Add Item Form ends -->
 
+                <div class="row mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Select Store</label>
+                <Multiselect
+                    v-model="selectedStore"
+                    :options="stores"
+                    :multiple="false"
+                    :close-on-select="true"
+                    :clear-on-select="true"
+                    placeholder="Select store"
+                    label="name"
+                    track-by="id"
+                />
             </div>
-            
-            <!-- Items Table starts -->
+        </div>
+
+              
+<!-- Items Table starts -->
             <div class="custom-table">
-                <v-client-table :data="goodIssuedItems" :columns="issuedItemColumns" :options="items_table_option">
-                    <template #Sno="props">
-                        {{ props.index + 0 }}
-                    </template>  
+                <v-client-table :data="issuedItems" :columns="issuedItemColumns" :options="items_table_option">
+<template #received="props">
+  <input 
+    type="number" 
+    class="form-control" 
+    v-model="props.row.received" 
+    placeholder="Enter Quantity"  
+    @input="updateReceivedValue(props.row)"
+  />
+</template>
                 </v-client-table>
             </div>
             <!-- Items Table ends -->
+
+
+            </div>
+            
+            
           </div>
              <div class="modal-footer" style="flex: 0 1 auto;">
             <button type="button" class="btn btn-danger btn-sm py-2 px-2" data-bs-dismiss="modal">Close</button>
             <button 
-            v-if="status_id === 1 && items.length > 0" 
+            
             type="button" 
             class="btn btn-success btn-sm py-2 px-2" 
-            @click="activateRequisition(currentRequisitionId)"
+            @click="submitIssuedItems"
             >
-              <template v-if="activate_requisition_spinner">
+              <template v-if="submittingIssuedItems">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               </template>
               <template v-else>
@@ -387,12 +367,78 @@
               </template>
             </button>
 
-         
           </div>
         </div>
       </div>
     </div>
-      <!-- issue note modal ends -->
+      <!-- Delivery note modal for status In Transit ends -->
+   
+
+      <!-- Delivery note modal for status Delivered starts -->
+<div class="modal fade" id="delivery_note" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deliveryNoteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="height: 90vh;">
+    <div class="modal-content d-flex flex-column" style="height: 100%;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deliveryNoteLabel">Delivery Note</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_delivery"></button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; flex: 1 1 auto;">
+        <!-- Add this card section to the modal -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+           <div class="widget widget-statistics h-100 shadow card" @click="navigateToLabourRequests" style="cursor: pointer;">
+              <div class="card-body p-4">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label text-dark fw-bold">Received By:</label>
+                      <p class="form-control-static fw-bold text-dark">{{ deliveryNoteInfo.received_by || 'N/A' }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label text-dark fw-bold">Date Received:</label>
+                      <p class="form-control-static fw-bold text-dark">{{ deliveryNoteInfo.date_received || 'N/A' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-body">
+          <!-- Items Table starts -->
+          <div class="custom-table">
+            <v-client-table :data="goodDeliveryItems" :columns="deliveryItemColumns" :options="items_table_option">
+              <template #Sno="props">
+                {{ props.index + 0 }}
+              </template>  
+            </v-client-table>
+          </div>
+          <!-- Items Table ends -->
+        </div>
+      </div>
+      <div class="modal-footer" style="flex: 0 1 auto;">
+        <button type="button" class="btn btn-danger btn-sm py-2 px-2" data-bs-dismiss="modal">Close</button>
+        <button 
+          v-if="status_id === 1 && items.length > 0" 
+          type="button" 
+          class="btn btn-success btn-sm py-2 px-2" 
+          @click="activateRequisition(currentRequisitionId)"
+        >
+          <template v-if="activate_requisition_spinner">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </template>
+          <template v-else>
+            Save
+          </template>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delivery note modal for status Delivered ends -->
 
     </div>
 </template>
@@ -405,6 +451,7 @@
     import { useMeta } from '@/composables/use-meta';
     import '@/assets/sass/scrollspyNav.scss';
     import Swal from 'sweetalert2';
+    import * as bootstrap from 'bootstrap';
 
     useMeta({ title: 'Custom Table' });
 
@@ -423,10 +470,14 @@ const activate_requisition_spinner = ref(false);
     const loadingIndicator = inject('loadingIndicator');
     const projects = ref([]);
     const Requisitions = ref([]);
+    const Issued = ref([]);
     const loading_spinner = ref(false);
     const columns = ref(['Sno', 'requester_name','requester_email','requisition_type','project','status',  'actions']);
-     const issuedItemColumns = ref(['Sno','item','unit', 'requested','issued','remark','excess/shortage']);
+     const issuedItemColumns = ref(['Sno', 'item','unit', 'requested','issued','received','remark']); 
     const role_registration = ref(false);
+    const deliveryItemColumns = ref(['Sno', 'item','unit', 'requested','issued','received','remark','excess/shortage']);
+    const goodDeliveryItems = ref([]);
+    const currentDate = new Date().toISOString().split('T')[0];
     const showMessage = inject('showMessage');
     const showError = inject('showError');
     const gin_id = ref('');
@@ -485,88 +536,7 @@ const activate_requisition_spinner = ref(false);
 });
     
 
-const goodIssuedItems = ref(['']);
-const viewIssueNote = (id) => {
-    console.log('issue note id :', id);
-    axiosInstance.get(`/good-issue-notes?requisition_id=${id}`)
-        .then((response) => {
-            goodIssuedItems.value = response.data.flatMap((note, index) =>
-                note.items.map((item, i) => ({
-                    Sno: index + i + 1,
-                    item: item.item_name,
-                    unit: item.unit,
-                    remark: item.remark,
-                    requested: item.requested,
-                    issued: item.supplied,
-                    'excess/shortage': item.requested - item.supplied
-                }))
-            );
-        })
-        .catch((error) => {
-            showError('Failed to fetch issue note');
-            console.error(error);
-        });
-};
 
-
-const issuedItems = ref([]);
-const issueItems = async (item) => {
-  const existingIndex = issuedItems.value.findIndex(i => i.item_id === item.id);
-
-  const newEntry = {
-    item_id: item.id,
-    quantity: item.supplied
-  };
-
-  if (existingIndex !== -1) {
-    issuedItems.value[existingIndex] = newEntry; // overwrite
-  } else {
-    issuedItems.value.push(newEntry); // add new
-  }
-};
-
-
-const submittingIssuedItems = ref(false);
-const submitIssuedItems = async () => {
-    submittingIssuedItems.value = true;
-    const payload = {
-        itemData : issuedItems.value,
-        gin_id: gin_id.value,
-    }
-    const statusPayload = {
-        status_id: 9, 
-    };
-    try {
-        const response = await axiosInstance.post('/gin-items', payload);
-         await axiosInstance.put(`/requisitions/${currentRequisitionId.value}`,statusPayload);
-         await viewIssueNote (currentRequisitionId.value);
-        showMessage(response.data.message);
-        document.getElementById('close_editing').click();
-    // Open the issue_note modal using Bootstrap's modal API
-    const issueNoteModal = document.getElementById('issue_note');
-    if (issueNoteModal) {
-        const modal = bootstrap.Modal.getOrCreateInstance(issueNoteModal);
-        modal.show();
-    }
-    getRequisitions();
-    } catch (error) {
-        showError('Failed to save issued items');
-        console.log(error);
-    } finally {
-        submittingIssuedItems.value = false;
-    }
-
-}
-
-     const getStatuses = async ()=>
-    {
-        try {
-            const response = axiosInstance.get(`/statuses`);
-            allStatuses.value = response.data;
-        } catch (error) {
-            showError(error.message);
-        }
-    };
 
     const getRequisitions = () => {
         loading_spinner.value = true;
@@ -853,14 +823,192 @@ const deleteItem = (item) => {
         }
     });
 };
+
+// Delivery status modal instructions 
+
+// Add this ref at the top with your other refs
+const deliveryNoteInfo = ref({
+  received_by: '',
+  date_received: ''
+});
+
+const viewLoading = ref(false);
+
+const handleViewDelivery = (gin_id) => {
+    if (viewLoading.value) return;
+    viewDeliveryNote(gin_id);
+};
+
+const viewDeliveryNote = async (gin_id) => {
+    viewLoading.value = true;
+    try {
+        const response = await axiosInstance.get(`/goods-delivery-notes?gin_id=${gin_id}`);
+        
+        if (response.data.length > 0) {
+            deliveryNoteInfo.value = {
+                received_by: response.data[0].received_by,
+                date_received: response.data[0].date_received
+            };
+        }
+        
+        goodDeliveryItems.value = response.data.flatMap((note, index) =>
+            (note.items || []).map((item, i) => ({
+                Sno: index * 100 + i + 1,
+                item: item.item_name,
+                description: item.description || 'No description',
+                requested: item.requested_quantity,
+                issued: item.supplied_quantity,
+                received: item.received_quantity,
+                'excess/shortage': item.received_quantity - item.supplied_quantity
+            }))
+        );
+
+        const modalEl = document.getElementById('delivery_note');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    } catch (error) {
+        showError('Failed to fetch delivery note');
+        console.error(error);
+    } finally {
+        viewLoading.value = false;
+    }
+};
+
+
+// In Transit status modal instructions 
+
+// Add these refs
+const issuedItems = ref([]);
+const selectedStore = ref('');
+const stores = ref([]);
+const submittingIssuedItems = ref(false);
+
+
+const showIssuedItems = (ginId) => {
+    const selectedGIN = allGINs.value.find(gin => gin.id === ginId);
+    if (selectedGIN && selectedGIN.items) {
+        issuedItems.value = selectedGIN.items.map((item, index) => ({
+            Sno: index + 1,
+            gin_item_id: item.gin_item_id,
+            inventory_item_id: item.inventory_item_id,
+            item: item.item_name,
+            unit: item.unit || 'n/a',
+            requested: item.requested,
+            issued: item.supplied,
+            received: '', // Initialize as 0 for user input
+            remark: item.remark || "no remark",
+            'excess/shortage': 0 // Will be calculated on input
+        }));
+        gin_id.value = ginId;
+    } else {
+        showError("No items found for this GIN");
+    }
+};
+
+const updateReceivedValue = (item) => {
+  const existingIndex = issuedItems.value.findIndex(i => i.gin_item_id === item.gin_item_id);
+  
+  if (existingIndex !== -1) {
+    issuedItems.value[existingIndex].received = item.received;
+  }
+};
+
+const submitIssuedItems = async () => {
+  submittingIssuedItems.value = true;
+if (selectedStore.value === '') {
+    showError("Please select Store ");
+    submittingIssuedItems.value = false;
+    return;
+}
+if (issuedItems.value.some(item => !item.received && item.received !== 0)) {
+    showError("Please fill the received quantity");
+    submittingIssuedItems.value = false;
+    return;
+}
+  try {
+    const ginResponse = await axiosInstance.get(`/good-issue-notes/${gin_id.value}`);
+    const requisition_id = ginResponse.data.requisition_id;
+    let delivery_note_id = ginResponse.data.delivery_note_id;
+    if (!delivery_note_id) {
+      const deliveryNoteResponse = await axiosInstance.post('/goods-delivery-notes', {
+        gin_id: gin_id.value,
+        date_received: currentDate,
+        received_by_id: JSON.parse(localStorage.getItem("user")).id,
+      });
+      delivery_note_id = deliveryNoteResponse.data.id;
+    }
+    const bulkPayload = {
+      items: issuedItems.value.map(item => ({
+        goods_delivery_note_id: delivery_note_id,
+        gin_item_id: item.gin_item_id,
+        item_id: item.inventory_item_id,
+        quantity: item.received,
+        store_id: selectedStore.value.id,
+        remark: item.remark || null
+      }))
+    };
+
+    // 4. Single bulk request instead of loop
+    await axiosInstance.post('/goods-delivery-note-items', bulkPayload);
+
+    // 5. Update statuses
+    await Promise.all([
+      axiosInstance.put(`/requisitions/${requisition_id}`, {
+        status_id: 10 // Delivered
+      }),
+    ]);
+
+    // 6. UI updates
+    showMessage(`Items received successfully`);
+    document.getElementById('close_editing').click();
+    getRequisitions();
+
+  } catch (error) {
+    showError(error.message);
+  } finally {
+    submittingIssuedItems.value = false;
+  }
+};
+
+// Add this method to fetch stores
+const getStores = async () => {
+  try {
+    const response = await axiosInstance.get('/stores');
+    stores.value = response.data;
+  } catch (error) {
+    showError(error.message);
+  }
+};
+
+const allGINs = ref([]); // Add this at the top with your other refs
+
+const getIssued = () => {
+    loading_spinner.value = true;
+    axiosInstance.get('good-issue-notes')
+        .then((response) => {
+            allGINs.value = response.data; // Store all GINs data
+            Issued.value = response.data.map((item, index) => {
+                return {
+                    // ... existing mapping
+                };
+            });
+            loading_spinner.value = false;
+        })
+        .catch((error) => {
+            showError(error.message);
+            loading_spinner.value = false;
+        });
+};
  
 
+
     onMounted(async () => {
-        await getRequisitionTypes();
+        getRequisitionTypes();
         getRequisitions();
         getProjects();
-        getStatuses();
-        await fetchItemList();
+        fetchItemList();
+        getStores();
+        getIssued(); 
     });
 </script>
 

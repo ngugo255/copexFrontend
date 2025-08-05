@@ -29,9 +29,30 @@
                                 <span class="badge inv-status" :class="'badge-' + props.row.status.class">{{ props.row.status.key }} </span>
                             </template>
                             <template #actions="props">
+
+                                <a href="javascript:void(0);" title="View"
+                             v-if="props.row.status.key === 'Delivered'" 
+                                @click.stop.prevent="handleViewDelivery(props.row.gin_id)"
+                                      >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="text-info"
+                                    >
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
                                  
                                  <a href="javascript:void(0);" title="View" data-bs-toggle="modal" data-bs-target="#view_requisition"
-                                 v-if="props.row.status.key !== 'In Transit'" 
+                                 v-if="props.row.status.key === 'Pending' "
                                  @click="viewRequisitionItems(props.row)">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +73,7 @@
                                     </svg>
                                 </a>
                                  <a href="javascript:void(0);" title="View" data-bs-toggle="modal" data-bs-target="#view_requisition"
-                                 v-else
+                                 v-if="props.row.status.key === 'In Transit' "
                                  @click="viewIssueNote(props.row.id)">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +108,7 @@
       <div class="modal-dialog modal-lg" style="height: 90vh;">
         <div class="modal-content d-flex flex-column" style="height: 100%;">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Requisition Items</h1>
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Issue Note</h1>
 
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_editing" @click="clearForm"></button>
           </div>
@@ -227,7 +248,7 @@
       <div class="modal-dialog modal-xl" style="height: 90vh;">
         <div class="modal-content d-flex flex-column" style="height: 100%;">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Good Issue Note</h1>
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Issue Note</h1>
 
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_issuing" ></button>
           </div>
@@ -326,6 +347,72 @@
     </div>
       <!-- issue note modal ends -->
 
+            <!-- Delivery note modal starts -->
+<div class="modal fade" id="delivery_note" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deliveryNoteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="height: 90vh;">
+    <div class="modal-content d-flex flex-column" style="height: 100%;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deliveryNoteLabel">Delivery Note</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_delivery"></button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; flex: 1 1 auto;">
+        <!-- Add this card section to the modal -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+           <div class="widget widget-statistics h-100 shadow card" @click="navigateToLabourRequests" style="cursor: pointer;">
+              <div class="card-body p-4">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label text-dark fw-bold">Received By:</label>
+                      <p class="form-control-static fw-bold text-dark">{{ deliveryNoteInfo.received_by || 'N/A' }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label text-dark fw-bold">Date Received:</label>
+                      <p class="form-control-static fw-bold text-dark">{{ deliveryNoteInfo.date_received || 'N/A' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-body">
+          <!-- Items Table starts -->
+          <div class="custom-table">
+            <v-client-table :data="goodDeliveryItems" :columns="deliveryItemColumns" :options="items_table_option">
+              <template #Sno="props">
+                {{ props.index + 0 }}
+              </template>  
+            </v-client-table>
+          </div>
+          <!-- Items Table ends -->
+        </div>
+      </div>
+      <div class="modal-footer" style="flex: 0 1 auto;">
+        <button type="button" class="btn btn-danger btn-sm py-2 px-2" data-bs-dismiss="modal">Close</button>
+        <button 
+          v-if="status_id === 1 && items.length > 0" 
+          type="button" 
+          class="btn btn-success btn-sm py-2 px-2" 
+          @click="activateRequisition(currentRequisitionId)"
+        >
+          <template v-if="activate_requisition_spinner">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </template>
+          <template v-else>
+            Save
+          </template>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delivery note modal ends -->
+
     </div>
 </template>
 
@@ -359,6 +446,8 @@ const activate_requisition_spinner = ref(false);
     const columns = ref(['Sno', 'requester_name','requester_email','requisition_type','project','status', 'actions']);
      const issuedItemColumns = ref(['Sno','item','unit', 'requested','issued','remark','excess/shortage']);
     const role_registration = ref(false);
+    const deliveryItemColumns = ref(['Sno', 'item','unit', 'requested','issued','received','remark','excess/shortage']);
+    const goodDeliveryItems = ref([]);
     const showMessage = inject('showMessage');
     const showError = inject('showError');
     const gin_id = ref('');
@@ -784,6 +873,54 @@ const deleteItem = (item) => {
                 });
         }
     });
+};
+
+// Add this ref at the top with your other refs
+const deliveryNoteInfo = ref({
+  received_by: '',
+  date_received: ''
+});
+
+const viewLoading = ref(false);
+
+const handleViewDelivery = (gin_id) => {
+    if (viewLoading.value) return;
+    viewDeliveryNote(gin_id);
+};
+
+const viewDeliveryNote = async (gin_id) => {
+    viewLoading.value = true;
+    try {
+        const response = await axiosInstance.get(`/goods-delivery-notes?gin_id=${gin_id}`);
+        
+        if (response.data.length > 0) {
+            deliveryNoteInfo.value = {
+                received_by: response.data[0].received_by,
+                date_received: response.data[0].date_received
+            };
+        }
+        
+        goodDeliveryItems.value = response.data.flatMap((note, index) =>
+            (note.items || []).map((item, i) => ({
+                Sno: index * 100 + i + 1,
+                item: item.item_name,
+                description: item.description || 'No description',
+                requested: item.requested_quantity,
+                issued: item.supplied_quantity,
+                received: item.received_quantity,
+                'excess/shortage': item.received_quantity - item.supplied_quantity
+            }))
+        );
+
+        const modalEl = document.getElementById('delivery_note');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    } catch (error) {
+        showError('Failed to fetch delivery note');
+        console.error(error);
+    } finally {
+        viewLoading.value = false;
+    }
 };
  
 
